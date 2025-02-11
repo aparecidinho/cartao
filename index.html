@@ -3,53 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulação de Troca de Limite</title>
+    <title>Simulador Troca de Limite</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            color: #333;
         }
         .container {
-            width: 90%;
-            max-width: 400px;
-            margin: 20px auto;
+            max-width: 500px;
+            margin: 40px auto;
+            background: #fff;
             padding: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
         }
-        select, input, button {
-            width: 100%;
-            margin: 10px 0;
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
+        h1, h2 {
+            color: #222;
         }
-        button {
+        .menu button {
+            padding: 15px 20px;
+            margin: 10px;
+            width: 90%;
             background-color: #28a745;
-            color: white;
+            color: #fff;
             border: none;
+            border-radius: 8px;
             cursor: pointer;
+            font-size: 16px;
+            transition: 0.3s;
         }
-        button:hover {
+        .menu button:hover {
             background-color: #218838;
         }
-        .result {
+        label {
+            display: block;
+            margin-top: 12px;
             font-weight: bold;
-            margin-top: 15px;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        .hidden {
+            display: none;
+        }
+        .btn-calcular {
+            background-color: #32CD32;
+            color: #fff;
+            padding: 12px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 18px;
+            width: 100%;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+        .btn-calcular:hover {
+            background-color: #2E8B57;
+        }
+        .btn-voltar {
+            background-color: #D3D3D3;
+            color: #333;
+            padding: 12px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 18px;
+            width: 100%;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+        .btn-voltar:hover {
+            background-color: #B0B0B0;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Simulação de Troca de Limite</h2>
-        <label for="valor">Digite o valor desejado:</label>
-        <input type="number" id="valor" placeholder="Ex: 1000">
-        
-        <label for="parcelas">Escolha o número de parcelas:</label>
-        <select id="parcelas">
+
+    <!-- Menu Inicial -->
+    <div class="container menu" id="menuInicial">
+        <h1>Simulador Troca de Limite</h1>
+        <p>Escolha a modalidade desejada:</p>
+        <button onclick="mostrarModalidade('limite')">Pegar Limite Disponível</button>
+        <button onclick="mostrarModalidade('livre')">Pegar Limite Livre de Taxas</button>
+    </div>
+
+    <!-- Modalidade 1: Pegar Limite Disponível -->
+    <div class="container hidden" id="modalidadeLimite">
+        <h2>Pegar Limite Disponível</h2>
+        <label for="valorLimite">Insira o valor desejado:</label>
+        <input type="number" id="valorLimite" placeholder="Ex: R$ 0,00" min="0">
+        <label for="parcelasLimite">Selecione o número de parcelas:</label>
+        <select id="parcelasLimite">
             <option value="1">1x</option>
             <option value="2">2x</option>
             <option value="3">3x</option>
@@ -69,30 +130,54 @@
             <option value="17">17x</option>
             <option value="18">18x</option>
         </select>
-        
-        <button onclick="calcular()">Calcular</button>
-        <p class="result" id="resultado"></p>
+        <button class="btn-calcular" onclick="calcularLimite()">Calcular</button>
+        <button class="btn-voltar" onclick="voltarMenu()">Voltar ao Menu</button>
+        <div id="resultadoLimite" class="result"></div>
+    </div>
+
+    <!-- Modalidade 2: Pegar Limite Livre de Taxas -->
+    <div class="container hidden" id="modalidadeLivre">
+        <h2>Pegar Limite Livre de Taxas</h2>
+        <label for="valorLivre">Insira o valor desejado:</label>
+        <input type="number" id="valorLivre" placeholder="Ex: R$ 0,00" min="0">
+        <label for="parcelasLivre">Selecione o número de parcelas:</label>
+        <select id="parcelasLivre">
+            <option value="1">1x</option>
+            <option value="2">2x</option>
+            <option value="3">3x</option>
+            <option value="4">4x</option>
+            <option value="5">5x</option>
+            <option value="6">6x</option>
+            <option value="7">7x</option>
+            <option value="8">8x</option>
+            <option value="9">9x</option>
+            <option value="10">10x</option>
+            <option value="11">11x</option>
+            <option value="12">12x</option>
+            <option value="13">13x</option>
+            <option value="14">14x</option>
+            <option value="15">15x</option>
+            <option value="16">16x</option>
+            <option value="17">17x</option>
+            <option value="18">18x</option>
+        </select>
+        <button class="btn-calcular" onclick="calcularLivre()">Calcular</button>
+        <button class="btn-voltar" onclick="voltarMenu()">Voltar ao Menu</button>
+        <div id="resultadoLivre" class="result"></div>
     </div>
 
     <script>
-        const taxas = {
-            "1": 6.25, "2": 8.9, "3": 10.06, "4": 11.23, "5": 12.39,
-            "6": 13.54, "7": 14.49, "8": 16.13, "9": 17.76, "10": 19.39,
-            "11": 21.01, "12": 22.44, "13": 23.74, "14": 25.35, "15": 26.45,
-            "16": 27.54, "17": 28.63, "18": 30.71
-        };
-
-        function calcular() {
-            let valor = parseFloat(document.getElementById("valor").value);
-            let parcelas = document.getElementById("parcelas").value;
-            if (!valor || valor <= 0) {
-                alert("Digite um valor válido.");
-                return;
-            }
-            let taxa = taxas[parcelas] / 100;
-            let valorFinal = valor + (valor * taxa);
-            document.getElementById("resultado").innerText = `Total com taxas: R$ ${valorFinal.toFixed(2)}`;
+        function mostrarModalidade(modalidade) {
+            document.getElementById('menuInicial').classList.add('hidden');
+            document.getElementById('modalidadeLimite').classList.toggle('hidden', modalidade !== 'limite');
+            document.getElementById('modalidadeLivre').classList.toggle('hidden', modalidade !== 'livre');
+        }
+        function voltarMenu() {
+            document.getElementById('menuInicial').classList.remove('hidden');
+            document.getElementById('modalidadeLimite').classList.add('hidden');
+            document.getElementById('modalidadeLivre').classList.add('hidden');
         }
     </script>
+
 </body>
 </html>
